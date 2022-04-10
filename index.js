@@ -27,8 +27,22 @@ async function run() {
         await client.connect();
         const database = client.db("fakeAccountNo");
         const accountCollection = database.collection("bbBank");
+        const budgetCollection = database.collection("budget");
 
 
+         //add budget
+        app.post('/budget', async (req, res) => {
+            const budget = req.body;
+            console.log(budget);
+            const result = await budgetCollection.insertOne(budget);
+            res.json(result);
+        });
+
+        // GET budget
+        app.get('/getBudget', async (req, res) => {
+            const budget = await budgetCollection.find({}).toArray();
+            res.send(budget);
+        });
 
         app.get('/accountno', async (req, res) => {
             const cursor = accountCollection.find({});
