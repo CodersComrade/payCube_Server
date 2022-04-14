@@ -27,6 +27,7 @@ async function run() {
         await client.connect();
         const database = client.db("fakeAccountNo");
         const accountCollection = database.collection("bbBank");
+        const marchentsCollection = database.collection("marchents");
 
 
 
@@ -35,6 +36,36 @@ async function run() {
             const accountno = await cursor.toArray();
             res.send(accountno);
         })
+
+        //marchent
+        app.post('/marchents', async (req, res) => {
+            const marchents = req.body;
+            const cursor = marchentsCollection.insertOne(marchents);
+            console.log(req.body);
+            res.json(result);
+        })
+
+        app.get('/marchents', async (req, res) => {
+            const cursor = marchentsCollection.find({});
+            const marchents = await cursor.toArray();
+            res.send(marchents);
+        })
+
+        app.put('/marchents/:id', async (req, res) => {
+
+            const id = req.params.id;
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: `Approved`
+                },
+            };
+
+            const filter = { _id: ObjectId(id) };
+            const result = await marchentsCollection.updateOne(filter, updateDoc, options);
+
+        })
+
 
 
     } finally {
