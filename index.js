@@ -63,12 +63,14 @@ async function run() {
             const businessName = req.body.businessName;
             const businessLogo = req.files.businessLogo;
             const merchantPhone = req.body.merchantPhone;
+            const merchantNid = req.body.merchantNid;
             const picData = businessLogo.data;
             const encodedPic = picData.toString('base64');
             const imageBuffer = Buffer.from(encodedPic, 'base64');
             const merchant = {
                 businessName,
                 merchantPhone,
+                merchantNid,
                 businessLogo: imageBuffer
             }
             const result = await merchantsCollection.insertOne(merchant)
