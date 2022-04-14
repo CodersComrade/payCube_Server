@@ -60,9 +60,19 @@ async function run() {
         //marchent get post put
 
         app.post('/marchents', async (req, res) => {
-            const marchents = req.body;
-            const cursor = marchentsCollection.insertOne(marchents);
-            console.log(req.body);
+            const businessName = req.body.businessName;
+            const businessLogo = req.body.businessLogo;
+            const marchentPhone = req.body.marchentPhone;
+            const picData = businessLogo.data;
+            const encodedPic = picData.toString('base64');
+            const imageBuffer = Buffer.from(encodedPic, 'base64');
+            const marchent = {
+                businessName,
+                marchentPhone,
+                businessLogo: imageBuffer
+            }
+            const result = await marchentsCollection.insertOne(marchent)
+
             res.json(result);
         })
 
