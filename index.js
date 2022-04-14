@@ -37,7 +37,9 @@ async function run() {
             res.send(accountno);
         })
 
-        //marchent
+
+        //marchent get post put
+
         app.post('/marchents', async (req, res) => {
             const marchents = req.body;
             const cursor = marchentsCollection.insertOne(marchents);
