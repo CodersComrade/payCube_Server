@@ -28,7 +28,7 @@ async function run() {
         const database = client.db("fakeAccountNo");
         const accountCollection = database.collection("bbBank");
 
-        const marchentsCollection = database.collection("marchents");
+        const merchantsCollection = database.collection("merchants");
 
 
 
@@ -57,32 +57,32 @@ async function run() {
         })
 
 
-        //marchent get post put
+        //merchant get post put
 
-        app.post('/marchents', async (req, res) => {
+        app.post('/merchants', async (req, res) => {
             const businessName = req.body.businessName;
-            const businessLogo = req.body.businessLogo;
-            const marchentPhone = req.body.marchentPhone;
+            const businessLogo = req.files.businessLogo;
+            const merchantPhone = req.body.merchantPhone;
             const picData = businessLogo.data;
             const encodedPic = picData.toString('base64');
             const imageBuffer = Buffer.from(encodedPic, 'base64');
-            const marchent = {
+            const merchant = {
                 businessName,
-                marchentPhone,
+                merchantPhone,
                 businessLogo: imageBuffer
             }
-            const result = await marchentsCollection.insertOne(marchent)
+            const result = await merchantsCollection.insertOne(merchant)
 
             res.json(result);
         })
 
-        app.get('/marchents', async (req, res) => {
-            const cursor = marchentsCollection.find({});
-            const marchents = await cursor.toArray();
-            res.send(marchents);
+        app.get('/merchants', async (req, res) => {
+            const cursor = merchantsCollection.find({});
+            const merchants = await cursor.toArray();
+            res.send(merchants);
         })
 
-        app.put('/marchents/:id', async (req, res) => {
+        app.put('/merchants/:id', async (req, res) => {
 
             const id = req.params.id;
             const options = { upsert: true };
@@ -93,7 +93,7 @@ async function run() {
             };
 
             const filter = { _id: ObjectId(id) };
-            const result = await marchentsCollection.updateOne(filter, updateDoc, options);
+            const result = await merchantsCollection.updateOne(filter, updateDoc, options);
 
         })
 
