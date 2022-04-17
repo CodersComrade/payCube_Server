@@ -27,13 +27,37 @@ async function run() {
         await client.connect();
         const database = client.db("fakeAccountNo");
         const accountCollection = database.collection("bbBank");
-
         const merchantsCollection = database.collection("merchants");
-
-
-
         const budgetCollection = database.collection("budget");
+        const expAccountCollection = database.collection("accounts");
+        const addMoneyToAccountCollection = database.collection("addedMoney");
 
+        //add money to accounts
+        app.post('/addedMoney', async (req, res) => {
+            const addedMoney = req.body;
+            const result = await addMoneyToAccountCollection.insertOne(addedMoney);
+            res.json(result);
+        });
+
+        // get all added money from accounts
+        app.get('/getAddedMoney', async (req, res) => {
+            const addedMoney = await addMoneyToAccountCollection.find({}).toArray();
+            res.send(addedMoney);
+        });
+
+
+        //add accounts
+        app.post('/accounts', async (req, res) => {
+            const accounts = req.body;
+            const result = await expAccountCollection.insertOne(accounts);
+            res.json(result);
+        });
+
+        // get accounts
+        app.get('/getAccounts', async (req, res) => {
+            const accounts = await expAccountCollection.find({}).toArray();
+            res.send(accounts);
+        });
 
         //add budget
         app.post('/budget', async (req, res) => {
